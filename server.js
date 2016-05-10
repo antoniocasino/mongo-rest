@@ -8,6 +8,7 @@ db.once('open', function() {
   console.log("we are connected");
 });
 var Meeting    = require('./app/models/meeting');
+var User       = require('./app/models/user')
 var moment = require('moment');
 
 // call the packages we need
@@ -42,6 +43,72 @@ router.get('/', function(req, res) {
 
 // on routes that end in /bears
 // ----------------------------------------------------
+router.route('/users')
+    .post(function(req,res){
+        var user = new User();
+        user.username = req.body.username;
+        user.password = req.body.password;
+        user.email = req.body.email;
+
+        user.save(function(err) {
+            if (err){
+                res.send(err);
+            }
+            res.json({ message: 'User created!' });
+        });
+    }).get(function(req, res) {
+        User.find(function(err, users) {
+            if (err){
+                res.send(err);
+            }
+            res.json(users);
+
+        });
+    });
+
+  router.route('/users/:user_id')
+    .get(function(req, res) {
+        User.findById(req.params.user_id, function(err, user) {
+
+        if (err)
+            res.send(err);
+        res.json(user);
+      });
+    })
+    .put(function(req, res) {
+
+        // use our bear model to find the bear we want
+        User.findById(req.params.meeting_id, function(err, meeting) {
+
+            if (err)
+                res.send(err);
+
+            user.username = req.body.username;
+            user.password = req.body.password;
+            user.email = req.body.email;
+
+            // save the bear
+            user.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Meeting updated!' });
+            });
+
+        });
+    })
+    .delete(function(req, res) {
+      User.remove({
+          _id: req.params.user_id
+      }, function(err, user) {
+          if (err)
+              res.send(err);
+
+          res.json({ message: 'Successfully deleted' });
+      });
+  });
+
+
 router.route('/meetings')
 
     // create a bear (accessed at POST http://localhost:8080/api/bears)
