@@ -43,6 +43,22 @@ router.get('/', function(req, res) {
 
 // on routes that end in /bears
 // ----------------------------------------------------
+router.route('/login')
+    .post(function(req,res){
+        User.findOne({username:req.body.username},function(err,user){
+            if(err)
+              res.send(err);
+
+            if(user.password === req.body.password){
+                res.json(user);
+            }else{
+              res.json({"message":"username and password does not match"});
+            }
+        });
+
+    });
+
+
 router.route('/users')
     .post(function(req,res){
         var user = new User();
