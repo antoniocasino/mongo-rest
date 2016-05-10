@@ -49,10 +49,10 @@ router.route('/login')
             if(err)
               res.send(err);
 
-            if(user.password === req.body.password){
-                res.json(user);
+            if(!user || user.password !== req.body.password){
+                res.json({"message":"username and password do not match"});
             }else{
-              res.json({"message":"username and password does not match"});
+                res.json(user);
             }
         });
 
