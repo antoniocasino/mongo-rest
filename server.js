@@ -42,48 +42,86 @@ router.get('/', function(req, res) {
 
 // on routes that end in /bears
 // ----------------------------------------------------
-try{
+router.route('/meetings')
+
+    // create a bear (accessed at POST http://localhost:8080/api/bears)
+    .post(function(req, res) {
+
+        var meeting = new Meeting();
+
+        meeting.startDate = moment(req.body.startDate, 'DD/MM/YYYY');
+        meeting.endDate = moment(req.body.endDate, 'DD/MM/YYYY');
+        meeting.registrationStart = moment(req.body.registrationStart, 'DD/MM/YYYY');
+        meeting.registrationEnd = moment(req.body.registrationEnd, 'DD/MM/YYYY');
+        meeting.name = req.body.name;
+        meeting.owner = req.body.owner;
+        meeting.location = req.body.location;
+        meeting.address = req.body.address;
+        // save the bear and check for errors
+        meeting.save(function(err) {
+            if (err){
+                res.send(err);
+            }
+            res.json({ message: 'Meeting created!' });
+        });
 
 
-  router.route('/meetings')
+    }).get(function(req, res) {
+        Meeting.find(function(err, meetings) {
+            if (err){
+                res.send(err);
+            }
+            res.json(meetings);
 
-      // create a bear (accessed at POST http://localhost:8080/api/bears)
-      .post(function(req, res) {
+        });
 
-          var meeting = new Meeting();
-          
-          meeting.startDate = moment(req.body.startDate, 'DD/MM/YYYY');
-          meeting.endDate = moment(req.body.endDate, 'DD/MM/YYYY');
-          meeting.registrationStart = moment(req.body.registrationStart, 'DD/MM/YYYY');
-          meeting.registrationEnd = moment(req.body.registrationEnd, 'DD/MM/YYYY');
-          meeting.name = req.body.name;
-          meeting.owner = req.body.owner;
-          meeting.location = req.body.location;
-          meeting.address = req.body.address;
-          // save the bear and check for errors
-          meeting.save(function(err) {
-              if (err){
+    });
+
+    // on routes that end in /bears/:bear_id
+    // ----------------------------------------------------
+  router.route('/meetings/:meeting_id')
+
+      // get the bear with that id (accessed at GET http://localhost:8080/api/bears/:bear_id)
+      .get(function(req, res) {
+          Meeting.findById(req.params.meeting_id, function(err, meeting) {
+
+          if (err)
+              res.send(err);
+          res.json(meeting);
+        });
+      })
+
+      // update the bear with this id (accessed at PUT http://localhost:8080/api/bears/:bear_id)
+      .put(function(req, res) {
+
+          // use our bear model to find the bear we want
+          Meeting.findById(req.params.meeting_id, function(err, meeting) {
+
+              if (err)
                   res.send(err);
-              }
-              res.json({ message: 'Meeting created!' });
+
+              meeting.name = req.body.name;  // update the bears info
+
+              // save the bear
+              meeting.save(function(err) {
+                  if (err)
+                      res.send(err);
+
+                  res.json({ message: 'Meeting updated!' });
+              });
+
           });
+      })
+      .delete(function(req, res) {
+        Meeting.remove({
+            _id: req.params.meeting_id
+        }, function(err, meeting) {
+            if (err)
+                res.send(err);
 
-
-      }).get(function(req, res) {
-          Meeting.find(function(err, meetings) {
-              if (err){
-                  res.send(err);
-              }
-              else{
-                  res.json(meetings);
-              }
-              console.log("cazzola");
-          });
-
-      });
-}catch(e){
-  console.log(e);
-}
+            res.json({ message: 'Successfully deleted' });
+        });
+    });
 
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
