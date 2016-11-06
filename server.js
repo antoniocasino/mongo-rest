@@ -93,7 +93,7 @@ router.route('/donors')
 
   router.route('/donors/:donor_id')
     .get(function(req, res) {
-        Donor.findById(req.params.user_id, function(err, donor) {
+        Donor.findById(req.params.donor_id, function(err, donor) {
         if (err){
             res.send(err);
         }else{
@@ -104,7 +104,7 @@ router.route('/donors')
     .put(function(req, res) {
 
         // use our bear model to find the bear we want
-        Donor.findById(req.params.meeting_id, function(err, donor) {
+        Donor.findById(req.params.donor_id, function(err, donor) {
 
             if (err){
                 res.send(err);
