@@ -21,7 +21,7 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var port = process.env.PORT || 8080;        // set our port
+var port = process.env.PORT || 80;        // set our port
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -62,8 +62,8 @@ router.route('/login')
 router.route('/donors')
     .post(function(req,res){
         var donor = new Donor();
-        donor.username = req.body.username;
-        donor.password = req.body.password;
+        donor.firstName = req.body.firstName;
+        donor.lastName = req.body.lastName;
         donor.email = req.body.email;
         donor.contact = req.body.contact;
         donor.bloodGroup = req.body.bloodGroup;
@@ -74,15 +74,17 @@ router.route('/donors')
         donor.save(function(err) {
             if (err){
                 res.send(err);
+            }else{
+                res.json({ message: 'Donor created!' });
             }
-            res.json({ message: 'Donor created!' });
         });
     }).get(function(req, res) {
         Donor.find(function(err, users) {
             if (err){
                 res.send(err);
+            }else{
+                res.json(users);
             }
-            res.json(users);
         });
     });
 
@@ -91,8 +93,9 @@ router.route('/donors')
         Donor.findById(req.params.user_id, function(err, donor) {
         if (err){
             res.send(err);
+        }else{
+            res.json(donor);
         }
-        res.json(donor);
       });
     })
     .put(function(req, res) {
