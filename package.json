@@ -5,9 +5,7 @@
     "body-parser": "~1.0.1",
     "express": "~4.0.0",
     "moment": "^2.13.0",
-    "mongoose": "4.1.9"
-  },
-  "devDependencies": {
+    "mongoose": "4.1.9",
     "cors": "^2.8.1"
   }
 }
