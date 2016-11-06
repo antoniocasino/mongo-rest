@@ -109,8 +109,8 @@ router.route('/donors')
             if (err){
                 res.send(err);
             }
-            donor.username = req.body.username;
-            donor.password = req.body.password;
+            donor.firstName = req.body.firstName;
+            donor.lastName = req.body.lastName;
             donor.email = req.body.email;
             donor.contact = req.body.contact;
             donor.bloodGroup = req.body.bloodGroup;
