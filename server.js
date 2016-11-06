@@ -8,7 +8,7 @@ db.once('open', function() {
   console.log("we are connected");
 });
 var Meeting    = require('./app/models/meeting');
-var User       = require('./app/models/user')
+var Donor       = require('./app/models/donor')
 var moment = require('moment');
 
 // call the packages we need
@@ -59,68 +59,76 @@ router.route('/login')
     });
 
 
-router.route('/users')
+router.route('/donors')
     .post(function(req,res){
-        var user = new User();
-        user.username = req.body.username;
-        user.password = req.body.password;
-        user.email = req.body.email;
+        var donor = new Donor();
+        donor.username = req.body.username;
+        donor.password = req.body.password;
+        donor.email = req.body.email;
+        donor.contact = req.body.contact;
+        donor.bloodGroup = req.body.bloodGroup;
+        donor.latitude = req.body.latitude;
+        donor.longitude = req.body.longitude;
+        donor.ip = req.body.ip;
 
-        user.save(function(err) {
+        donor.save(function(err) {
             if (err){
                 res.send(err);
             }
-            res.json({ message: 'User created!' });
+            res.json({ message: 'Donor created!' });
         });
     }).get(function(req, res) {
-        User.find(function(err, users) {
+        Donor.find(function(err, users) {
             if (err){
                 res.send(err);
             }
             res.json(users);
-
         });
     });
 
-  router.route('/users/:user_id')
+  router.route('/donors/:donor_id')
     .get(function(req, res) {
-        User.findById(req.params.user_id, function(err, user) {
-
-        if (err)
+        Donor.findById(req.params.user_id, function(err, donor) {
+        if (err){
             res.send(err);
-        res.json(user);
+        }
+        res.json(donor);
       });
     })
     .put(function(req, res) {
 
         // use our bear model to find the bear we want
-        User.findById(req.params.meeting_id, function(err, meeting) {
+        Donor.findById(req.params.meeting_id, function(err, donor) {
 
-            if (err)
+            if (err){
                 res.send(err);
-
-            user.username = req.body.username;
-            user.password = req.body.password;
-            user.email = req.body.email;
-
+            }
+            donor.username = req.body.username;
+            donor.password = req.body.password;
+            donor.email = req.body.email;
+            donor.contact = req.body.contact;
+            donor.bloodGroup = req.body.bloodGroup;
+            donor.latitude = req.body.latitude;
+            donor.longitude = req.body.longitude;
+            donor.ip = req.body.ip;
             // save the bear
-            user.save(function(err) {
-                if (err)
+            donor.save(function(err) {
+                if (err){
                     res.send(err);
-
-                res.json({ message: 'Meeting updated!' });
+                }
+                res.json({ message: 'Donor updated!' });
             });
 
         });
     })
     .delete(function(req, res) {
-      User.remove({
-          _id: req.params.user_id
+      Donor.remove({
+          _id: req.params.donor_id
       }, function(err, user) {
-          if (err)
+          if (err){
               res.send(err);
-
-          res.json({ message: 'Successfully deleted' });
+            }
+          res.json({ message: 'Donor successfully deleted' });
       });
   });
 
