@@ -1,7 +1,7 @@
 // BASE SETUP
 // =============================================================================
 var mongoose   = require('mongoose');
-mongoose.connect('mongodb://antoniocasino:test@ds011462.mlab.com:11462/mms-antonio'); // connect to our database
+mongoose.connect('mongodb://antonio:casino@ds011462.mlab.com:11462/mms-antonio'); // connect to our database
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
