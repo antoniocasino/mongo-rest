@@ -102,8 +102,7 @@ router.route('/donors')
       });
     })
     .put(function(req, res) {
-
-        // use our bear model to find the bear we want
+        // use our donor model to find the donor we want
         Donor.findById(req.params.donor_id, function(err, donor) {
 
             if (err){
@@ -117,7 +116,7 @@ router.route('/donors')
             donor.latitude = req.body.latitude;
             donor.longitude = req.body.longitude;
             donor.ip = req.body.ip;
-            // save the bear
+            // save the donor
             donor.save(function(err) {
                 if (err){
                     res.send(err);
